@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: principal
+    volumes:
+      - ./devops/postgresql/data:/var/lib/postgresql/data # create local folder if not exists
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+      
+networks:
+  app-network:
+    driver: bridge
+    
+    
+# 1. Install docker
+# 2. Set Path exe from docker-compose.exe
+# 3. Run comands below
+
+    
+#>   clean old containers
+# docker-compose down
+#>   install
+# docker-compose -f docker-compose.yml up -d --build
+# docker-compose logs -f
+
+
+#>   Run local
+# docker-compose up -d
+# docker-compose logs -f
+# docker exec -it <docker-container-id> /bin/bash
+# psql -h localhost -U postgres
+# postgres=# \l+ #show databases
+# postgres=# SELECT datname FROM pg_database;
+# postgres=# \c principal # switching databases 
+# principal=# CREATE TABLE leads (id INTEGER PRIMARY KEY, name VARCHAR);
+# principal=# \dt # listing tables
+# principal=# INSERT INTO leads VALUES (1, 'Joe'), (2,'Rebecca'), (3,'Smith');
+# principal=# SELECT * FROM leads;

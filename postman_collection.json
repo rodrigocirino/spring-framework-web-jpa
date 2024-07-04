@@ -1,0 +1,194 @@
+{
+	"info": {
+		"_postman_id": "0691859d-d138-479c-a1cd-adbd20162f52",
+		"name": "Spring Rest MVC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36698956"
+	},
+	"item": [
+		{
+			"name": "save unique item",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"name\": \"Ana Silva\",\r\n        \"email\": \"ana.silva@example.com\",\r\n        \"license_work\": \"34cd\",\r\n        \"type_medication\": \"PRESCRIPTION\",\r\n        \"active\": false,\r\n        \"address\": {\r\n            \"street\": \"Avenida Paulista\",\r\n            \"apt\": \"101\",\r\n            \"num\": 456,\r\n            \"city\": \"São Paulo\"\r\n        }\r\n    }\r\n]\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/pharmacist",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pharmacist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update one item",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 6,\r\n    \"name\": \"Ana Silva Atualizada\",\r\n    \"email\": \"ana.silva@atualizada.com\",\r\n    \"license_work\": \"888cdd\",\r\n    \"type_medication\": \"PRESCRIPTION\",\r\n    \"active\": false,\r\n    \"address\": {\r\n        \"street\": \"Avenida Paulista\",\r\n        \"apt\": \"101\",\r\n        \"num\": 456,\r\n        \"city\": \"Borda do Campo\"\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/pharmacist",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pharmacist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete one item",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/pharmacist/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pharmacist",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save multiple itens",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"name\": \"Ana Silva\",\r\n        \"email\": \"ana.silva@example.com\",\r\n        \"license_work\": \"34cd\",\r\n        \"type_medication\": \"PRESCRIPTION\",\r\n        \"address\": {\r\n            \"street\": \"Avenida Paulista\",\r\n            \"apt\": \"101\",\r\n            \"num\": 456,\r\n            \"city\": \"Rio de Janeiro\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Carlos Pereira\",\r\n        \"email\": \"carlos.pereira@example.com\",\r\n        \"license_work\": \"56ef\",\r\n        \"type_medication\": \"SIMPLE\",\r\n        \"address\": { \r\n            \"street\": \"Rua da Consolação\",\r\n            \"apt\": null,\r\n            \"num\": 789,\r\n            \"city\": \"São Paulo\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Mariana Oliveira\",\r\n        \"email\": \"mariana.oliveira@example.com\",\r\n        \"license_work\": \"78gh\",\r\n        \"type_medication\": \"OVERTHECOUNTER\",\r\n        \"address\": {\r\n            \"street\": \"Rua Augusta\",\r\n            \"apt\": \"202\",\r\n            \"num\": 101,\r\n            \"city\": \"Curitiba\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Ricardo Souza\",\r\n        \"email\": \"ricardo.souza@example.com\",\r\n        \"license_work\": \"90ij\",\r\n        \"type_medication\": \"SIMPLE\",\r\n        \"address\": {\r\n            \"street\": \"Rua Haddock Lobo\",\r\n            \"apt\": null,\r\n            \"num\": 112,\r\n            \"city\": \"São Paulo\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Fernanda Lima\",\r\n        \"email\": \"fernanda.lima@example.com\",\r\n        \"license_work\": \"12kl\",\r\n        \"type_medication\": \"OVERTHECOUNTER\",\r\n        \"address\": {\r\n            \"street\": \"Rua Oscar Freire\",\r\n            \"apt\": \"303\",\r\n            \"num\": 134,\r\n            \"city\": \"Rio de Janeiro\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"João Mendes\",\r\n        \"email\": \"joao.mendes@example.com\",\r\n        \"license_work\": \"34mn\",\r\n        \"type_medication\": \"PRESCRIPTION\",\r\n        \"address\": {\r\n            \"street\": \"Avenida Faria Lima\",\r\n            \"apt\": null,\r\n            \"num\": 145,\r\n            \"city\": \"Curitiba\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Paula Rocha\",\r\n        \"email\": \"paula.rocha@example.com\",\r\n        \"license_work\": \"56op\",\r\n        \"type_medication\": \"PRESCRIPTION\",\r\n        \"address\": {\r\n            \"street\": \"Rua Teodoro Sampaio\",\r\n            \"apt\": \"404\",\r\n            \"num\": 167,\r\n            \"city\": \"Porto Alegre\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Lucas Almeida\",\r\n        \"email\": \"lucas.almeida@example.com\",\r\n        \"license_work\": \"78qr\",\r\n        \"type_medication\": \"OVERTHECOUNTER\",\r\n        \"address\": {\r\n            \"street\": \"Rua dos Pinheiros\",\r\n            \"apt\": null,\r\n            \"num\": 189,\r\n            \"city\": \"Foz do Iguaçu\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Gabriela Costa\",\r\n        \"email\": \"gabriela.costa@example.com\",\r\n        \"license_work\": \"90st\",\r\n        \"type_medication\": \"PRESCRIPTION\",\r\n        \"address\": {\r\n            \"street\": \"Avenida Ibirapuera\",\r\n            \"apt\": \"505\",\r\n            \"num\": 200,\r\n            \"city\": \"Curitiba\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Mateus Martins\",\r\n        \"email\": \"mateus.martins@example.com\",\r\n        \"license_work\": \"12uv\",\r\n        \"type_medication\": \"SIMPLE\",\r\n        \"address\": {\r\n            \"street\": \"Rua do Carmo\",\r\n            \"apt\": null,\r\n            \"num\": 211,\r\n            \"city\": \"Rio de Janeiro\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Larissa Ribeiro\",\r\n        \"email\": \"larissa.ribeiro@example.com\",\r\n        \"license_work\": \"34wx\",\r\n        \"type_medication\": \"OVERTHECOUNTER\",\r\n        \"address\": {\r\n            \"street\": \"Rua Bela Cintra\",\r\n            \"apt\": \"606\",\r\n            \"num\": 232,\r\n            \"city\": \"São Paulo\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Pedro Azevedo\",\r\n        \"email\": \"pedro.azevedo@example.com\",\r\n        \"license_work\": \"56yz\",\r\n        \"type_medication\": \"PRESCRIPTION\",\r\n        \"address\": {\r\n            \"street\": \"Rua Vergueiro\",\r\n            \"apt\": null,\r\n            \"num\": 243,\r\n            \"city\": \"Porto Alegre\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Julia Fernandes\",\r\n        \"email\": \"julia.fernandes@example.com\",\r\n        \"license_work\": \"78ab\",\r\n        \"type_medication\": \"PRESCRIPTION\",\r\n        \"address\": {\r\n            \"street\": \"Avenida Brigadeiro Luís Antônio\",\r\n            \"apt\": \"707\",\r\n            \"num\": 254,\r\n            \"city\": \"Rio de Janeiro\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Rodrigo Carvalho\",\r\n        \"email\": \"rodrigo.carvalho@example.com\",\r\n        \"license_work\": \"90cd\",\r\n        \"type_medication\": \"OVERTHECOUNTER\",\r\n        \"address\": {\r\n            \"street\": \"Rua Cardoso de Almeida\",\r\n            \"apt\": null,\r\n            \"num\": 276,\r\n            \"city\": \"Rio de Janeiro\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Beatriz Monteiro\",\r\n        \"email\": \"beatriz.monteiro@example.com\",\r\n        \"license_work\": \"12ef\",\r\n        \"type_medication\": \"SIMPLE\",\r\n        \"address\": {\r\n            \"street\": \"Rua Barão de Limeira\",\r\n            \"apt\": \"808\",\r\n            \"num\": 287,\r\n            \"city\": \"São Paulo\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Felipe Araújo\",\r\n        \"email\": \"felipe.araujo@example.com\",\r\n        \"license_work\": \"34gh\",\r\n        \"type_medication\": \"PRESCRIPTION\",\r\n        \"address\": {\r\n            \"street\": \"Rua 25 de Março\",\r\n            \"apt\": null,\r\n            \"num\": 298,\r\n            \"city\": \"Rio de Janeiro\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Camila Barbosa\",\r\n        \"email\": \"camila.barbosa@example.com\",\r\n        \"license_work\": \"56ij\",\r\n        \"type_medication\": \"OVERTHECOUNTER\",\r\n        \"address\": {\r\n            \"street\": \"Avenida Angélica\",\r\n            \"apt\": \"909\",\r\n            \"num\": 300,\r\n            \"city\": \"Curitiba\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Thiago Batista\",\r\n        \"email\": \"thiago.batista@example.com\",\r\n        \"license_work\": \"78kl\",\r\n        \"type_medication\": \"PRESCRIPTION\",\r\n        \"address\": {\r\n            \"street\": \"Rua Domingos de Morais\",\r\n            \"apt\": null,\r\n            \"num\": 321,\r\n            \"city\": \"Curitiba\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Isabela Ramos\",\r\n        \"email\": \"isabela.ramos@example.com\",\r\n        \"license_work\": \"90mn\",\r\n        \"type_medication\": \"OVERTHECOUNTER\",\r\n        \"address\": {\r\n            \"street\": \"Rua Vergueiro\",\r\n            \"apt\": \"1001\",\r\n            \"num\": 343,\r\n            \"city\": \"Porto Alegre\"\r\n        }\r\n    },\r\n    {\r\n        \"name\": \"Vinicius Borges\",\r\n        \"email\": \"vinicius.borges@example.com\",\r\n        \"license_work\": \"12op\",\r\n        \"type_medication\": \"PRESCRIPTION\",\r\n        \"address\": {\r\n            \"street\": \"Avenida São João\",\r\n            \"apt\": null,\r\n            \"num\": 354,\r\n            \"city\": \"Foz do Iguaçu\"\r\n        }\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/pharmacist/batch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pharmacist",
+						"batch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list sorted",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/pharmacist?sort=name,desc&size=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pharmacist"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "name,desc"
+						},
+						{
+							"key": "size",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list_all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/pharmacist?sort=id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pharmacist"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "id"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list_all only true",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/pharmacist?sort=id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pharmacist"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "id"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
