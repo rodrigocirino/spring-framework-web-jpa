@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "0691859d-d138-479c-a1cd-adbd20162f52",
-		"name": "Spring Rest MVC",
+		"name": "Spring Boot Web",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "36698956"
 	},
@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "[\r\n    {\r\n        \"name\": \"Ana Silva\",\r\n        \"email\": \"ana.silva@example.com\",\r\n        \"license_work\": \"34cd\",\r\n        \"type_medication\": \"PRESCRIPTION\",\r\n        \"active\": false,\r\n        \"address\": {\r\n            \"street\": \"Avenida Paulista\",\r\n            \"apt\": \"101\",\r\n            \"num\": 456,\r\n            \"city\": \"São Paulo\"\r\n        }\r\n    }\r\n]\r\n",
+					"raw": "{\r\n    \"name\": \"Ana Silva\",\r\n    \"email\": \"ana.silva@example.com\",\r\n    \"license_work\": \"34cd\",\r\n    \"type_medication\": \"PRESCRIPTION\",\r\n    \"active\": false,\r\n    \"address\": {\r\n        \"street\": \"Avenida Paulista\",\r\n        \"apt\": \"101\",\r\n        \"num\": 456,\r\n        \"city\": \"São Paulo\"\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -68,7 +68,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/pharmacist/5",
+					"raw": "http://localhost:8080/pharmacist/7",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -76,7 +76,7 @@
 					"port": "8080",
 					"path": [
 						"pharmacist",
-						"5"
+						"7"
 					]
 				}
 			},
@@ -171,20 +171,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/pharmacist?sort=id",
+					"raw": "http://localhost:8080/pharmacist/active",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"pharmacist"
-					],
-					"query": [
-						{
-							"key": "sort",
-							"value": "id"
-						}
+						"pharmacist",
+						"active"
 					]
 				}
 			},

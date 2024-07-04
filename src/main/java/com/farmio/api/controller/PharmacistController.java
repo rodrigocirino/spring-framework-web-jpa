@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.farmio.api.usuario.CustomerData;
 import com.farmio.api.usuario.Pharmacist;
 import com.farmio.api.usuario.PharmacistDataList;
 import com.farmio.api.usuario.PharmacistDataUpdate;
+import com.farmio.api.usuario.PharmacistDetailsDTO;
 import com.farmio.api.usuario.PharmacistRepository;
 
 import jakarta.validation.Valid;
@@ -44,17 +47,28 @@ public class PharmacistController {
 	}
 	
 	@GetMapping("/active")
-	public Page<PharmacistDataList> listTrueRec(@PageableDefault Pageable pages) {
+	public ResponseEntity<Page<PharmacistDataList>> listTrueRec(@PageableDefault Pageable pages) {
 		// Converte stream to Pharmacist Object
-		return repository.findAllByActiveTrue(pages).map(ph -> new PharmacistDataList(ph.getId(), ph.getName(),
+		var page = repository.findAllByActiveTrue(pages).map(ph -> new PharmacistDataList(ph.getId(), ph.getName(),
 				ph.getLicense_work(), ph.getActive(), ph.getAddress()));
+		return ResponseEntity.ok(page);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getById(@PathVariable Long id) {
+		Pharmacist entity = repository.getReferenceById(id);
+		return ResponseEntity.ok(new PharmacistDetailsDTO(entity));
+
 	}
 
 	// save only one item
 	@PostMapping
 	@Transactional
-	public void recorder(@RequestBody @Valid CustomerData json) {
-		repository.save(new Pharmacist(json));
+	public ResponseEntity<?> recorder(@RequestBody @Valid CustomerData json, UriComponentsBuilder uriBuilder) {
+		var ph = new Pharmacist(json);
+		var rep = repository.save(ph);
+		var uri = uriBuilder.path("/pharmacist/{id}").buildAndExpand(ph.getId()).toUri();
+		return ResponseEntity.created(uri).body(rep);
 	}
 
 	// save multiple itens
@@ -68,18 +82,20 @@ public class PharmacistController {
 
 	@PutMapping
 	@Transactional
-	public void updateRec(@RequestBody @Valid PharmacistDataUpdate json) {
-		var ref = repository.getReferenceById(json.id());
-		ref.updateRec(json);
+	public ResponseEntity<?> updateRec(@RequestBody @Valid PharmacistDataUpdate json) {
+		var entity = repository.getReferenceById(json.id());
+		entity.updateRec(json);
+		return ResponseEntity.ok(new PharmacistDetailsDTO(entity));
 	}
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	public void removeRec(@PathVariable Long id) {
+	public ResponseEntity<?> removeRec(@PathVariable Long id) {
 		System.out.println("Deleting id=" + id);
 		// repository.deleteById(id); // Hard Delete
-		var ref = repository.getReferenceById(id);
-		ref.deleteRec();// Soft Delete
+		var entity = repository.getReferenceById(id);
+		entity.deleteRec();// Soft Delete
+		return ResponseEntity.noContent().build();
 
 	}
 	
