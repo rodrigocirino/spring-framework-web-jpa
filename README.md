@@ -65,7 +65,12 @@ public class CustomerController {
 #### DTO Data Tranfer Object
 DTO para guardar os campos corretos do JSON, muito usado no spring
 
-Usamos aqui **record** uma classe implementada no Java 16 que facilita esta operação.
+Usamos aqui **record** uma classe implementada no **Java 16** que facilita esta operação.
+
+- Record ou Lombok para criar as entidades?
+- ["Qual o melhor, Lombok ou Records? - Giuliana Bezerra"](https://www.youtube.com/watch?v=95TFOpIIz_I)
+- Como dica fica records para DTOS e lombok para as entidades
+
 
 ```
 public record AddressData(String street, String apartment, String number, String city, String state) {
@@ -75,6 +80,13 @@ public record AddressData(String street, String apartment, String number, String
 
 public record CustomerData(String name, String email, AddressData address) {
 
+	/*
+	 -- construtor compacto
+	public CustomerData {
+		
+	
+	}
+	*/
 }
 
 # Json
@@ -495,40 +507,54 @@ public Page<PharmacistDataList> listTrueRec(@PageableDefault Pageable pages) {
 # Versão 2 - Continuação
 
 
-#### 
+#### Plugins úteis no Eclipse
+
+**Eclipse > Help > Install new software > Add url**
+- [Lombok](https://projectlombok.org/p2)
+- [SmartSave](updatesite/master/com.laboki.eclipse.updatesite.smartsave)
+- [Egit](https://download.eclipse.org/egit/updates)
+
+
+#### Verbos HTTP
+
+**Categoria de códigos**
+
+Os códigos HTTP possuem três dígitos, sendo que o primeiro dígito indica a classificação dentro de cinco categorias.
+
+1XX: Informativo – solicitação aceita ou em andamento;
+
+2XX: Confirmação – ação concluída ou entendida;
+
+3XX: Redirecionamento – algo mais precisa ser feito para completar a solicitação;
+
+4XX: Erro do cliente – solicitação não pode ser concluída ou contém sintaxe incorreta;
+
+5XX: Erro no servidor – servidor falhou ao concluir a solicitação.
+
+**Principais códigos de erro**
+Conhecer os principais códigos de erro HTTP ajuda a identificar problemas em aplicações e a entender a comunicação do navegador com o servidor.
+
+**Error 403**
+O código 403 indica que o servidor entendeu a requisição, mas se recusa a processá-la por falta de autorização do cliente.
+
+**Error 404**
+O código 404 significa que a URL digitada não leva a lugar nenhum, podendo ser uma aplicação inexistente, URL mudada ou digitada incorretamente.
+
+**Error 500**
+Esse erro indica um problema no servidor ou na comunicação com o sistema de arquivos, afetando a infraestrutura da aplicação.
+
+**Error 503**
+O código 503 indica que o serviço está temporariamente indisponível, devido a manutenção, sobrecarga ou ataques maliciosos como DDoS.
+
+[HTTP Cats](site1) e [HTTP Dogs](site2).
+
+
+####
+
 ```
-Categoria de códigos
-Os códigos HTTP (ou HTTPS) possuem três dígitos, sendo que o primeiro dígito significa a classificação dentro das possíveis cinco categorias.
 
-1XX: Informativo – a solicitação foi aceita ou o processo continua em andamento;
 
-2XX: Confirmação – a ação foi concluída ou entendida;
-
-3XX: Redirecionamento – indica que algo mais precisa ser feito ou precisou ser feito para completar a solicitação;
-
-4XX: Erro do cliente – indica que a solicitação não pode ser concluída ou contém a sintaxe incorreta;
-
-5XX: Erro no servidor – o servidor falhou ao concluir a solicitação.
-
-Principais códigos de erro
-Como dito anteriormente, conhecer os principais códigos de erro HTTP vai te ajudar a identificar problemas em suas aplicações, além de permitir que você entenda melhor a comunicação do seu navegador com o servidor da aplicação que está tentando acessar.
-
-Error 403
-O código 403 é o erro “Proibido”. Significa que o servidor entendeu a requisição do cliente, mas se recusa a processá-la, pois o cliente não possui autorização para isso.
-
-Error 404
-Quando você digita uma URL e recebe a mensagem Error 404 , significa que essa URL não te levou a lugar nenhum. Pode ser que a aplicação não exista mais, a URL mudou ou você digitou a URL errada.
-
-Error 500
-É um erro menos comum, mas de vez em quando ele aparece. Esse erro significa que há um problema com alguma das bases que faz uma aplicação rodar. Esse erro pode ser, basicamente, no servidor que mantém a aplicação no ar ou na comunicação com o sistema de arquivos, que fornece a infraestrutura para a aplicação.
-
-Error 503
-O erro 503 significa que o serviço acessado está temporariamente indisponível. Causas comuns são um servidor em manutenção ou sobrecarregado. Ataques maliciosos, como o DDoS, causam bastante esse problema.
-
-Uma dica final: dificilmente conseguimos guardar em nossa cabeça o que cada código significa, portanto, existem sites na internet que possuem todos os códigos e os significados para que possamos consultar quando necessário. Existem dois sites bem conhecidos e utilizados por pessoas desenvolvedoras, um para cada preferência: se você gosta de gatos, pode utilizar o HTTP Cats ; já, se prefere cachorros, utilize o HTTP Dogs .
 ```
-
-
 
 
 
