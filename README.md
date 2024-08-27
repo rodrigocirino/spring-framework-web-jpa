@@ -1,5 +1,7 @@
 # Farmácia Online (Fármio)
 
+![banner fármio](./src/main/resources/static/banner.jpeg "Fármio Farmácia Online") 
+
 
 #### Bibliotecas
 - Spring Boot
