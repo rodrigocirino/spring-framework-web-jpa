@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.farmio.api.usuario.CustomerData;
-import com.farmio.api.usuario.Pharmacist;
-import com.farmio.api.usuario.PharmacistDataList;
-import com.farmio.api.usuario.PharmacistDataUpdate;
-import com.farmio.api.usuario.PharmacistDetailsDTO;
-import com.farmio.api.usuario.PharmacistRepository;
+import com.farmio.api.beans.Pharmacist;
+import com.farmio.api.dto.Customer;
+import com.farmio.api.dto.PharmacistDetails;
+import com.farmio.api.dto.PharmacistList;
+import com.farmio.api.dto.PharmacistUpdate;
+import com.farmio.api.repository.PharmacistRepository;
 
 import jakarta.validation.Valid;
 
@@ -39,17 +39,17 @@ public class PharmacistController {
 	// http://localhost:8080/pharmacist?sort=name,desc&size=2
 	// app.properties can be edit size to tamanho or sort to filtro
 	@GetMapping
-	public Page<PharmacistDataList> listRec(@PageableDefault(size = 50) Pageable pages) {
+	public Page<PharmacistList> listRec(@PageableDefault(size = 50) Pageable pages) {
 		// Converte stream to Pharmacist Object
 		return repository.findAll(pages)
-				.map(ph -> new PharmacistDataList(ph.getId(), ph.getName(), ph.getLicense_work(), ph.getActive(),
+				.map(ph -> new PharmacistList(ph.getId(), ph.getName(), ph.getLicense_work(), ph.getActive(),
 						ph.getAddress()));
 	}
 	
 	@GetMapping("/active")
-	public ResponseEntity<Page<PharmacistDataList>> listTrueRec(@PageableDefault Pageable pages) {
+	public ResponseEntity<Page<PharmacistList>> listTrueRec(@PageableDefault Pageable pages) {
 		// Converte stream to Pharmacist Object
-		var page = repository.findAllByActiveTrue(pages).map(ph -> new PharmacistDataList(ph.getId(), ph.getName(),
+		var page = repository.findAllByActiveTrue(pages).map(ph -> new PharmacistList(ph.getId(), ph.getName(),
 				ph.getLicense_work(), ph.getActive(), ph.getAddress()));
 		return ResponseEntity.ok(page);
 	}
@@ -57,14 +57,14 @@ public class PharmacistController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id) {
 		Pharmacist entity = repository.getReferenceById(id);
-		return ResponseEntity.ok(new PharmacistDetailsDTO(entity));
+		return ResponseEntity.ok(new PharmacistDetails(entity));
 
 	}
 
 	// save only one item
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> recorder(@RequestBody @Valid CustomerData json, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> recorder(@RequestBody @Valid Customer json, UriComponentsBuilder uriBuilder) {
 		var ph = new Pharmacist(json);
 		var rep = repository.save(ph);
 		var uri = uriBuilder.path("/pharmacist/{id}").buildAndExpand(ph.getId()).toUri();
@@ -74,18 +74,18 @@ public class PharmacistController {
 	// save multiple itens
 	@PostMapping("/batch")
 	@Transactional
-	public void recorderBatch(@RequestBody @Valid List<CustomerData> jsonList) {
-		for (CustomerData json : jsonList) {
+	public void recorderBatch(@RequestBody @Valid List<Customer> jsonList) {
+		for (Customer json : jsonList) {
 			repository.save(new Pharmacist(json));
 		}
 	}
 
 	@PutMapping
 	@Transactional
-	public ResponseEntity<?> updateRec(@RequestBody @Valid PharmacistDataUpdate json) {
+	public ResponseEntity<?> updateRec(@RequestBody @Valid PharmacistUpdate json) {
 		var entity = repository.getReferenceById(json.id());
 		entity.updateRec(json);
-		return ResponseEntity.ok(new PharmacistDetailsDTO(entity));
+		return ResponseEntity.ok(new PharmacistDetails(entity));
 	}
 	
 	@DeleteMapping("/{id}")

@@ -299,6 +299,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 ```
 
+### Deletar hardcoded manualmente no banco, sem recriar com Flyway.
+
+- **Não se deve deletar manualmente**, e sim criar versões de alterações usando Flyway.
+- Flyway cria os campos com lowercase no banco de dados!!!
+- Depois de rodado a migration/inicializado, não pode alterar nada no arquivo sql, nem comentários (crie versões!).
+
+```
+psql -h localhost -U postgres
+postgres=# \c principal
+principal=# SELECT * FROM pharmacist;
+principal=# DROP TABLE pharmacist;
+principal=# SELECT * FROM flyway_schema_history;
+principal=# DELETE FROM flyway_schema_history where installed_rank = 1;
+principal=# \d+ pharmacist
+```
 
 
 ### Bean Validation
@@ -312,21 +327,6 @@ Bean validation é uma especificação do java para validar campos.
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-validation</artifactId>
 </dependency>
-```
-
-#### Deletar direto do banco para recriar com FlyWay.
-
-- Flyway cria os campos com lowercase!!!
-- Depois de rodado a migration/inicializado, não pode alterar nada no arquivo sql, nem comentários.
-
-```
-psql -h localhost -U postgres
-postgres=# \c principal
-principal=# SELECT * FROM pharmacist;
-principal=# DROP TABLE pharmacist;
-principal=# SELECT * FROM flyway_schema_history;
-principal=# DELETE FROM flyway_schema_history where installed_rank = 1;
-principal=# \d+ pharmacist
 ```
 
 #### @Valid Adicione em todos os campos de classe
