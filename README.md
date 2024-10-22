@@ -1,7 +1,6 @@
 # Farmácia Online (Fármio)
 
-![banner fármio](./src/main/resources/static/banner.jpeg "Fármio Farmácia Online") 
-
+<img alt="banner fármio" width="400" src="./src/main/resources/static/banner.jpeg" title="Fármio Farmácia Online"/>
 
 #### Bibliotecas
 - Spring Boot
@@ -37,7 +36,7 @@
 #### void main
 Serve apenas para subir o Tomcat embutido no Spring
 
-```
+```java
 @SpringBootApplication
 public class ApiApplication {
 
@@ -51,7 +50,7 @@ public class ApiApplication {
 #### POST Controller
 Controller tem métodos do Spring MVC "não tem nada a ver" com o Boot por isso não esta linkado com o void main.
 
-```
+```java
 @RestController
 @RequestMapping("save")
 public class CustomerController {
@@ -74,7 +73,7 @@ Usamos aqui **record** uma classe implementada no **Java 16** que facilita esta 
 - Como dica fica records para DTOS e lombok para as entidades
 
 
-```
+```java
 public record AddressData(String street, String apartment, String number, String city, String state) {
 
 	// String numero ou int numero?
@@ -157,7 +156,7 @@ networks:
 ```
 
 #### PostgreSQL docker comands to run terminal
-```
+```bash
 #>   Run local
 # docker-compose up -d
 # docker-compose logs -f
@@ -176,7 +175,7 @@ networks:
 ### Spring JPA Data + Lombok
 
 #### JPA Mapping
-```
+```java
 // Jpa methods
 @Table(name = "pharmacist")
 @Entity(name = "Pharmacist")
@@ -203,7 +202,7 @@ public class Pharmacist {
 ```
 
 #### Spring JPA Data - Mapping repository
-```
+```java
 # Não precisamos criar um Dao, mapear o repository, Spring nos ajuda nisso.
 public interface PharmacistRepository extends JpaRepository<Pharmacist, Long> {
 	// <Bean of repository, type of identifiers>  <Pharmacist, Long>
@@ -211,7 +210,7 @@ public interface PharmacistRepository extends JpaRepository<Pharmacist, Long> {
 ```
 
 #### Install Lombok no Eclipse ou STS
-```
+```text
 # Modo 1
 Eclipse > Menu Superior > Help > Install New Software
 Put url Exported Repository - https://projectlombok.org/p2 and ADD.
@@ -244,7 +243,7 @@ Flyway possuiu uma nomenclatura específica para rodar automaticamente no build 
 
 - *POSTGRES SQL*
 
-```
+```sql
 -- Comando para criar a tabela Pharmacist
 CREATE TABLE Pharmacist (
     id SERIAL PRIMARY KEY,
@@ -265,7 +264,7 @@ VALUES ('Nome do Farmacêutico', 123456, 'SIMPLE', 'Rua Exemplo', '123', 'Cidade
 
 #### Test in *{docker-compose logs -f}*
  
-```
+```text
 docker ps -a
 docker exec -it <docker-container-id> /bin/bash
 psql -h localhost -U postgres
@@ -290,7 +289,7 @@ principal=# SELECT * FROM pharmacist;
 
 Adicione ao seu método save/recorder/cadastrar a anotação Transactional do Spring para identificar que ele deve gerar transacionar/alterar/enviar dados ao banco.
 
-```
+```java
 import org.springframework.transaction.annotation.Transactional;
 
 	@PostMapping
@@ -307,7 +306,7 @@ import org.springframework.transaction.annotation.Transactional;
 - Flyway cria os campos com lowercase no banco de dados!!!
 - Depois de rodado a migration/inicializado, não pode alterar nada no arquivo sql, nem comentários (crie versões!).
 
-```
+```bash
 psql -h localhost -U postgres
 postgres=# \c principal
 principal=# SELECT * FROM pharmacist;
@@ -324,7 +323,7 @@ principal=# \d+ pharmacist
 
 Bean validation é uma especificação do java para validar campos.
 
-```
+```xml
 <dependency>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-validation</artifactId>
@@ -333,7 +332,7 @@ Bean validation é uma especificação do java para validar campos.
 
 #### @Valid Adicione em todos os campos de classe
 
-```
+```java
 public void recorder(@RequestBody @Valid CustomerData json) {
 	repository.save(new Pharmacist(json));
 }
@@ -357,7 +356,7 @@ public record CustomerData(
 - Uma vez criado o banco não podemos alterar a versão 1
 - Crie outro arquivo que inicie com V2 e faça alter tables.
 
-```
+```sql
 ALTER TABLE pharmacist ADD COLUMN phone VARCHAR(20);
 ALTER TABLE pharmacist RENAME COLUMN phone TO phone_number;
 
@@ -383,7 +382,7 @@ ALTER TABLE pharmacist RENAME COLUMN phone TO phone_number;
 
 
 #### Get filtering fields
-```
+```java
 @GetMapping
 public List<PharmacistDataList> listData() {
 	// Converte stream to Pharmacist Object
@@ -404,7 +403,7 @@ public record PharmacistDataList(
 - Pageable já tem stream, map e toList não precisa ser adicionado!!
 - Altere o retorno de List para Page
 
-```
+```java
 import org.springframework.data.domain.Pageable;
 
 //Full edit of controller
@@ -438,7 +437,7 @@ spring.jpa.properties.hibernate.format_sql=true
 
 #### PUT
 
-```
+```java
 // Mapping controller
 @PutMapping
 @Transactional
@@ -465,7 +464,7 @@ public void updateRec(PharmacistDataUpdate dto) {
 #### DELETE
 - Exclusão lógica, não apagamos realmente do banco apenas mudamos para desativado.
 
-```
+```java
 # your controller
 @DeleteMapping("/{id}")
 @Transactional
@@ -489,7 +488,7 @@ public void deleteRec() {
 - Se queremos filtrar apenas os ativos que são True podemos reimplementar a classe findAll, seguindo um padrão!
 - *findAllBy <my field is> <expected value>*
 
-```
+```java
 public interface PharmacistRepository extends JpaRepository<Pharmacist, Long> {
 
 	// findAllBy <my field is> <expected value>
@@ -551,36 +550,45 @@ O código 503 indica que o serviço está temporariamente indisponível, devido 
 [HTTP Cats](site1) e [HTTP Dogs](site2).
 
 
-####
+#### Lidando com erros no HTTP
 
+```java
+// Retornar 404 para id não encontrado e não 500 erro de servidor
+// Não precisa alterar nada nos controllers
+// No Build o Spring vai carregar essa classe e notfoundexception será retornado como notfound
+package com.farmio.api.infra;
+
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
+public class ErrorCustomizer {
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity tryError404() {
+        return ResponseEntity.notFound().build();
+    }
+}
 ```
 
 
+#### Se tentar inserir um dado, retornar erros com quais campos não foram preenchidos
+```java
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity tryError400(MethodArgumentNotValidException ex) {
+        var errors = ex.getFieldErrors();
+        var listErrors = errors.stream().map(DataErrorCustomizer::new).toList();
+        return ResponseEntity.badRequest().body(listErrors);
+    }
+
+    private record DataErrorCustomizer(String field, String message) {
+        private DataErrorCustomizer(FieldError er) {
+            this(er.getField(), er.getDefaultMessage());
+        }
+    }
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
