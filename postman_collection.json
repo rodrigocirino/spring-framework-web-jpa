@@ -2,38 +2,10 @@
 	"info": {
 		"_postman_id": "0691859d-d138-479c-a1cd-adbd20162f52",
 		"name": "Spring Boot Web",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "36698956"
 	},
 	"item": [
-		{
-			"name": "save unique item",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Ana Silva\",\r\n    \"email\": \"ana.silva@example.com\",\r\n    \"license_work\": \"34cd\",\r\n    \"type_medication\": \"PRESCRIPTION\",\r\n    \"active\": false,\r\n    \"address\": {\r\n        \"street\": \"Avenida Paulista\",\r\n        \"apt\": \"101\",\r\n        \"num\": 456,\r\n        \"city\": \"São Paulo\"\r\n    }\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/pharmacist",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"pharmacist"
-					]
-				}
-			},
-			"response": []
-		},
 		{
 			"name": "update one item",
 			"request": {
@@ -48,17 +20,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8080/pharmacist",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"pharmacist"
-					]
-				}
+				"url": "http://localhost:8080/pharmacist"
 			},
 			"response": []
 		},
@@ -67,18 +29,25 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/pharmacist/7",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"pharmacist",
-						"7"
-					]
-				}
+				"url": "http://localhost:8080/pharmacist/7"
+			},
+			"response": []
+		},
+		{
+			"name": "save unique item",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Ana Silva\",\r\n    \"email\": \"ana.silva@example.com\",\r\n    \"license_work\": \"34cd\",\r\n    \"type_medication\": \"PRESCRIPTION\",\r\n    \"active\": false,\r\n    \"address\": {\r\n        \"street\": \"Avenida Paulista\",\r\n        \"apt\": \"101\",\r\n        \"num\": 456,\r\n        \"city\": \"São Paulo\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/pharmacist"
 			},
 			"response": []
 		},
@@ -96,18 +65,41 @@
 						}
 					}
 				},
+				"url": "http://localhost:8080/pharmacist/batch"
+			},
+			"response": []
+		},
+		{
+			"name": "list_all",
+			"request": {
+				"method": "GET",
+				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/pharmacist/batch",
+					"raw": "http://localhost:8080/pharmacist?sort=id",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"pharmacist",
-						"batch"
+						"pharmacist"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "id"
+						}
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "list by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/pharmacist/88"
 			},
 			"response": []
 		},
@@ -141,47 +133,29 @@
 			"response": []
 		},
 		{
-			"name": "list_all",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/pharmacist?sort=id",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"pharmacist"
-					],
-					"query": [
-						{
-							"key": "sort",
-							"value": "id"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "list_all only true",
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/pharmacist/active",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"pharmacist",
-						"active"
-					]
-				}
+				"url": "http://localhost:8080/pharmacist/active"
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"login\": \"admin\",\r\n\t\"pass\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/login"
 			},
 			"response": []
 		}

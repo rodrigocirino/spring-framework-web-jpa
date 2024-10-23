@@ -1,6 +1,5 @@
-package com.farmio.api.infra;
+package com.farmio.api.infra.exception;
 
-import com.farmio.api.dto.PharmacistDetails;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

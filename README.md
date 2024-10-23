@@ -516,9 +516,9 @@ public Page<PharmacistDataList> listTrueRec(@PageableDefault Pageable pages) {
 - [Egit](https://download.eclipse.org/egit/updates)
 
 
-#### Verbos HTTP
+## Tratamento de erros
 
-**Categoria de códigos**
+**Categoria de códigos - Verbos HTTP**
 
 Os códigos HTTP possuem três dígitos, sendo que o primeiro dígito indica a classificação dentro de cinco categorias.
 
@@ -531,21 +531,6 @@ Os códigos HTTP possuem três dígitos, sendo que o primeiro dígito indica a c
 4XX: Erro do cliente – solicitação não pode ser concluída ou contém sintaxe incorreta;
 
 5XX: Erro no servidor – servidor falhou ao concluir a solicitação.
-
-**Principais códigos de erro**
-Conhecer os principais códigos de erro HTTP ajuda a identificar problemas em aplicações e a entender a comunicação do navegador com o servidor.
-
-**Error 403**
-O código 403 indica que o servidor entendeu a requisição, mas se recusa a processá-la por falta de autorização do cliente.
-
-**Error 404**
-O código 404 significa que a URL digitada não leva a lugar nenhum, podendo ser uma aplicação inexistente, URL mudada ou digitada incorretamente.
-
-**Error 500**
-Esse erro indica um problema no servidor ou na comunicação com o sistema de arquivos, afetando a infraestrutura da aplicação.
-
-**Error 503**
-O código 503 indica que o serviço está temporariamente indisponível, devido a manutenção, sobrecarga ou ataques maliciosos como DDoS.
 
 [HTTP Cats](site1) e [HTTP Dogs](site2).
 
@@ -590,14 +575,214 @@ public class ErrorCustomizer {
     }
 ```
 
+## Spring Security
+- Autenticação
+- Autorização e Controle de Acesso
+- Proteção contra ataques
+- Web autentica no modo Stateful (sessão única), API Rest é Stateless (não guarda sessão, memória)
+- JWT tokens para gerenciar a permissão de acesso
 
+**Apenas adicionando ao pom.xml as dependências do Spring Security faz BLOQUEAR TODAS AS REQUISIÇÕES
+retornando sempre 401 Unauthorized para todas as chamadas!**
 
+````text
+Quando acessar via navegador ele mostra uma tela de login
+Login: http://localhost:8080/pharmacist?continue
+User: user
+Senha: gerada pelo console da IDE
+Bcrypt: $2a$12$3pvLYdnNDSRwz3cS2pFIZ.1fXJ1Be2pHaH4L0Cio2cVl2rSdViC4q
 
+Quando roda pela primeira vez ele gera uma senha de desenvolvimento!
+# Using generated security password:    32cebb8e-27f1-49f6-8cd4-209f8722c132
+# This generated password is for development use only.
+````
 
-
-<!--
-####
+```xml
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <scope>test</scope>
+    </dependency>
 ```
 
+### Nova migration/tabela no banco
+
+Nova migration no banco para guardar usuario e senha de login.
+
+Mexeu na migration precisa parar o projeto e rodar novamente.
+```java
+@Table(name = "logins")
+@Entity(name = "logins")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
+public class Logins {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+    String user;
+    String pass;
+}
 ```
-!-->
+    
+```sql
+# resources\db\migration\V3__create-table-logins.sql
+CREATE TABLE Logins (
+    id SERIAL PRIMARY KEY,```
+    login VARCHAR(255) NOT NULL,
+    pass VARCHAR(255) NOT NULL
+);
+
+INSERT INTO Logins (login, pass) VALUES ('admin', 'admin');
+
+# Logs
+# ... restartedMain] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - create-table-logins"
+# ... restartedMain] o.f.core.internal.command.DbMigrate      : Successfully applied 1 migration to schema "public", now at version v3 (execution time 00:00.307s)
+```
+
+#### Config de auth
+- *UserDetailsService* é a classe do Spring Security que o spring chama para fazer o login baseado no formulario.
+                                                                                                                       
+```java
+@Service
+public class AuthenticationService implements UserDetailsService {
+    @Autowired
+    private LoginsRepository repository; //injeta o repository para consulta
+
+    // S.Security tem esse metodo padrao para login e senha, quando se acessa aquela página html
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return repository.findByLogin(username);
+    }
+}
+```
+
+- *@Configuration* classe de configurações de segurança
+
+```java
+// Mapping Table
+public class Logins {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String login;
+    private String pass;
+}
+
+// Config to security
+@Configuration
+@EnableWebSecurity
+public class SecurityConfigurations {
+
+    // Stateless
+    // Cross Site Request Forge - Disable porque nosso token já verifica isso
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+         return httpSecurity.csrf(csrf -> csrf.disable())
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .build();
+    }
+
+}
+
+// Service de login no Spring é identificado por UserDetailsService
+@Service
+public class AuthenticationService implements UserDetailsService {
+
+    @Autowired
+    private LoginsRepository repository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return repository.findByLogin(username);
+    }
+}
+```
+
+
+#### Pagina para gerar token
+
+- *AuthenticationManager* classe que permite acessar o service, já que não devemos acessá-lo diretamente.
+
+```java
+// Se tentar injetar assim ele vai dar erro é necessário configurar
+//numa classe @Configuration
+@Autowired
+private AuthenticationManager manager;
+//Inclua este método e o spring sabera fazer o autowired
+@Bean
+public AuthenticationManager managerConfig(AuthenticationConfiguration config) throws Exception {```
+    return config.getAuthenticationManager();
+}
+```
+   
+#### Consulte e insira uma senha no estilo bcrypt
+```sql
+\l+
+\c principal
+\dt
+\d+ logins
+SELECT * FROM logins; 
+INSERT INTO Logins (login, pass) VALUES  ('admin', '$2a$12$3pvLYdnNDSRwz3cS2pFIZ.1fXJ1Be2pHaH4L0Cio2cVl2rSdViC4q');
+```
+    
+- Alterações nas classes para criptografia
+
+```java
+// Logins.java
+@Override
+public Collection<? extends GrantedAuthority> getAuthorities() {```
+    return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+}
+
+@Override
+public String getPassword() {
+    return pass;
+}
+
+@Override
+public String getUsername() {
+    return login;
+}
+
+// Ativa o decrypt ao receber uma senha simples e verificar no banco uma senha criptada
+@Bean
+public PasswordEncoder encoder(){
+    return new BCryptPasswordEncoder();
+}
+
+// Record simples
+public record DataAuth(String login, String pass) { }
+```
+
+- Controller de acesso via API
+
+```java
+@RestController
+@RequestMapping("/login")
+public class AuthenticationController {
+
+    @Autowired
+    private AuthenticationManager manager;
+
+    @PostMapping
+    public ResponseEntity goLogin(@RequestBody @Valid DataAuth dataAuth) {
+        var token = new UsernamePasswordAuthenticationToken(dataAuth.login(), dataAuth.pass());
+        var authon = manager.authenticate(token);
+
+        return ResponseEntity.ok().build();
+    }
+}
+```
