@@ -10,7 +10,7 @@
 - Flyway
 - Postgres
 - Docker, docker-compose
-- Lombok
+- Lombok [👎](https://www.danvega.dev/blog/no-lombok)
 - Java 17
 - Spring na versão 4
 
