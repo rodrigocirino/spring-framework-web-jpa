@@ -22,7 +22,7 @@ public class AuthenticationController {
     @PostMapping
     public ResponseEntity goLogin(@RequestBody @Valid DataAuth dataAuth) {
         var token = new UsernamePasswordAuthenticationToken(dataAuth.login(), dataAuth.pass());
-        var authon = manager.authenticate(token);
+        manager.authenticate(token);
 
         return ResponseEntity.ok().build();
     }
