@@ -19,19 +19,19 @@ public class SecurityConfigurations {
     // Stateless
     // Cross Site Request Forge - Disable porque nosso token já verifica isso
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
          return httpSecurity.csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
 
     @Bean
-    public AuthenticationManager managerConfig(AuthenticationConfiguration config) throws Exception {
+    AuthenticationManager managerConfig(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
     @Bean
-    public PasswordEncoder encoder(){
+    PasswordEncoder encoder(){
         return new BCryptPasswordEncoder();
     }
 }
