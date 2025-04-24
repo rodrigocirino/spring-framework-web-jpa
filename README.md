@@ -9,7 +9,7 @@
 - Spring Validation
 - Flyway
 - Postgres
-- Docker, docker-compose
+- Docker, docker compose
 - Lombok [👎](https://www.danvega.dev/blog/no-lombok)
 - Java 17
 - Spring na versão 4
@@ -103,7 +103,7 @@ public record CustomerData(String name, String email, AddressData address) {
 }
 ```
 
-### Database with docker-compose
+### Database with docker compose
 
 #### PostgreSQL application.properties
 ```properties
@@ -131,7 +131,7 @@ spring.datasource.driverClassName: org.postgresql.Driver
 </dependency>		
 ```
 
-#### PostgreSQL docker-compose.yml
+#### PostgreSQL docker compose.yml
 ```yml
 version: "3.9"
 
@@ -158,8 +158,9 @@ networks:
 #### PostgreSQL docker comands to run terminal
 ```bash
 #>   Run local
-# docker-compose up -d
-# docker-compose logs -f
+# docker compose up -d
+# docker ps -a
+# docker compose logs -f
 # docker exec -it <docker-container-id> /bin/bash
 # psql -h localhost -U postgres
 # postgres=# 	\l+ 		#show databases
@@ -262,7 +263,7 @@ INSERT INTO Pharmacist (name, licenseNumber, type, address_street, address_numbe
 VALUES ('Nome do Farmacêutico', 123456, 'SIMPLE', 'Rua Exemplo', '123', 'Cidade Exemplo', 'UF');
 ```
 
-#### Test in *{docker-compose logs -f}*
+#### Test in *{docker compose logs -f}*
  
 ```text
 docker ps -a
@@ -278,6 +279,7 @@ principal-# \dt					# LIST TABLES
  public | pharmacist            | table | postgres
 (2 rows)
 
+# NÃO ESQUEÇA O PONTO E VIRGULA!
 principal=# SELECT * FROM pharmacist;
  id |         name         | licensenumber |  type  | address_street | address_number |  address_city  | address_state 
 ----+----------------------+---------------+--------+----------------+----------------+----------------+---------------
@@ -309,6 +311,7 @@ import org.springframework.transaction.annotation.Transactional;
 ```bash
 psql -h localhost -U postgres
 postgres=# \c principal
+principal=# \dt
 principal=# SELECT * FROM pharmacist;
 principal=# DROP TABLE pharmacist;
 principal=# SELECT * FROM flyway_schema_history;
@@ -582,10 +585,12 @@ public class ErrorCustomizer {
 - Web autentica no modo Stateful (sessão única), API Rest é Stateless (não guarda sessão, memória)
 - JWT tokens para gerenciar a permissão de acesso
 
-**Apenas adicionando ao pom.xml as dependências do Spring Security faz BLOQUEAR TODAS AS REQUISIÇÕES
-retornando sempre 401 Unauthorized para todas as chamadas!**
+### **Apenas adicionando ao pom.xml as dependências do Spring Security faz BLOQUEAR TODAS AS REQUISIÇÕES retornando sempre 401 Unauthorized para todas as chamadas!**
 
 ````text
+Tenha certeza que startou o servidor Java rodando o sistema
+mvn spring-boot:run
+
 Quando acessar via navegador ele mostra uma tela de login
 Login: http://localhost:8080/pharmacist?continue
 User: user
