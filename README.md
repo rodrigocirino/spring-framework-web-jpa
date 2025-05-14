@@ -1,6 +1,6 @@
 # Farmácia Online (Fármio)
 
-<img alt="banner fármio" width="400" src="./src/main/resources/static/banner.jpeg" title="Fármio Farmácia Online"/>
+<img alt="banner fármio" width="400" src="./src/main/resources/static/banner3.jpeg" title="Fármio Farmácia Online"/>
 
 #### Bibliotecas
 - Spring Boot
